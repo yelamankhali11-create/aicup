@@ -1,0 +1,29 @@
+<!doctype html>
+<html lang="kk">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>AiCup 2026</title>
+<style>body{margin:0;font:16px system-ui,sans-serif;background:#f3f6fa;color:#5b6b82;display:grid;place-items:center;min-height:100vh}@media(prefers-color-scheme:dark){body{background:#0b1524;color:#97a7c0}}</style>
+</head>
+<body>
+<p id="msg">Жүктелуде…</p>
+<script>
+(function(){
+  var API = "https://script.google.com/macros/s/AKfycbwU01_O8CkirY2hPn-iYLZdJqe4DL7TrWi3Tu3lJ7MmkmCh__-T1NEx7GRGihuxNLgp/exec";
+  var q = new URLSearchParams(location.search), u = API + "?api=page";
+  ["hq", "room", "desk"].forEach(function (k) { var v = q.get(k); if (v) u += "&" + k + "=" + encodeURIComponent(v); });
+  function fail() { document.getElementById("msg").textContent = "Байланыс болмады. Интернетті тексеріп, бетті жаңартыңыз."; }
+  function go(n) {
+    fetch(u, { credentials: "omit" }).then(function (r) { if (!r.ok) throw 0; return r.text(); }).then(function (h) {
+      window.AICUP_API = API;
+      var title = q.get("hq") ? "AiCup · бақылау штабы" : "AiCup · волонтерлер";
+      h = h.replace("<head>", "<head><title>" + title + "</title><script>window.AICUP_API=" + JSON.stringify(API) + "<\/script>");
+      document.open(); document.write(h); document.close();
+    }).catch(function () { if (n > 0) setTimeout(function () { go(n - 1); }, 2000); else fail(); });
+  }
+  go(2);
+})();
+</script>
+</body>
+</html>
